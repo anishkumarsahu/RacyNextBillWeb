@@ -1,0 +1,246 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Invoice</title>
+    <link rel="stylesheet" href="{% static 'cssMain/bootstrap.min.css' %}">
+
+    <style>
+        .border_class {
+            border: 1px solid grey;
+        }
+
+        table {
+            font-size: 12px;
+        }
+
+        tr td:nth-child(5) {
+            text-align: right;
+
+        }
+
+        .blank_row {
+            height: 37px;
+        }
+
+        @page {
+            size: A4;
+            margin: 2mm;
+
+        }
+
+        @media print {
+            body {
+                margin: 2mm 5mm 2mm 5mm;
+            }
+
+            p {
+                font-size: 12px;
+            }
+
+        }
+    </style>
+    <script src="{% static 'jsMain/jquery.min.js' %}"></script>
+</head>
+<body onload="myFunction()" style="margin: 2px;padding-left: 17px;padding-right: 17px;" class="border_class">
+<div class="row text-center border_class " style="padding: 0;border-top:none;">
+    <span class="" style="font-weight: bold;font-size: 10px;">TAX INVOICE</span>
+</div>
+<div class="row border_class" style="padding: 0;border-top:none">
+    <div class="col-xs-8" style="padding: 5px;border-right:1px solid grey;">
+        <span style="font-family: serif;font-weight: bold; font-size: 15px">{{ sale.companyID.name|upper }}</span> <span
+            style="float: right;
+    padding-right: 10px;">GSTIN: {{ sale.companyID.gst }}</span>
+        <br> <span
+            style="font-weight: bold;font-size: 11px;font-style: italic">Weighing Machine Sales & Repairing </span>
+        <br><span
+            style="font-weight: bold;font-size: 11px;letter-spacing: 1px;">{{ sale.companyID.address|upper }}</span>
+        <span style="margin-left: 5px;font-weight: bold;font-size: 11px;">{{ sale.companyID.zip }}</span><span
+            style="margin-left: 5px;font-weight: bold;font-size: 11px;">State: {{ sale.companyID.state|capfirst }}</span><span
+            style="margin-left: 5px;font-weight: bold;font-size: 11px;float: right">Code: 18</span>
+        <div class="row">
+            <div class="col-xs-4">
+           <span
+                   style="font-weight: bold;font-size: 11px;">DLN: 3347/D-1922/20</span>
+            </div>
+            <div class="col-xs-3">
+            <span
+                    style="font-weight: bold;font-size: 11px;">RLN: 739/R-357/96</span>
+            </div>
+            <div class="col-xs-5">
+            <span
+                    style="font-weight: bold;font-size: 11px;">PH No: 9954328479/7002587846</span>
+            </div>
+        </div>
+
+        <div class="col-xs-12" style="padding: 5px;border-top:1px solid grey;">
+            <span style="text-transform: uppercase;font-size: 9px;font-weight: bold">Details of Recipient / Billed to:</span>
+            <br><span>Name : <span>{{ sale.customerName }}</span></span><br>
+            <span>Address : <span>{{ sale.customerAddress }}</span></span><br>
+            <span>GSTIN/UIN : <span>{{ sale.customerGst }} </span> <span>     State: {{ sale.customerState }}</span><span
+                    style="float: right">Code: 18</span></span>
+
+        </div>
+
+
+    </div>
+    <div class="col-xs-4 " style="padding: 5px;">
+        <p>Invoice No. : <span>{{ sale.invoiceNumber|safe }}</span><span style="float: right"> Challan No.: <br> <span
+                style="float: right">{{ sale.challanNo }}</span></span></p>
+        <p>Invoice Date : <span>{{ sale.invoiceDate|date:"d-m-Y" }}</span></p>
+        <p>Reverse Charge(Y/N) : <span></span></p>
+        <p>Place of Supply : <span>Assam</span></p>
+        <p>State : <span>{{ sale.customerState }}</span><span style="float: right"> Code: 18</span></p>
+
+    </div>
+</div>
+<div class="row">
+    <table class="table table-bordered">
+
+        <thead>
+        <tr>
+            <th rowspan="2">Sl <br>
+                No.
+            </th>
+            <th rowspan="2">Description of Product/ Service</th>
+            <th rowspan="2">HSN/ <br>
+                SAC
+            </th>
+            <th rowspan="2">Qty</th>
+            <th rowspan="2" style="text-align: right">Rate</th>
+            <th rowspan="2" style="text-align: right">Disc %</th>
+
+            <th rowspan="2" style="text-align: right">Taxable
+                <br>Amount
+            </th>
+            <th colspan="2">CGST</th>
+            <th colspan="2">SGST</th>
+            <th rowspan="2" style="text-align: right">Total Amount</th>
+        </tr>
+        <tr>
+            <th>Rate</th>
+            <th style="text-align: right">Amount</th>
+            <th>Rate</th>
+            <th style="text-align: right">Amount</th>
+
+        </tr>
+
+        </thead>
+        <tbody>
+        {% for foo in saleProduct %}
+
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ foo.ProAndDis|safe }}</td>
+                <td>{{ foo.Hsn }}</td>
+                <td>{{ foo.Qty }}</td>
+                <td>{{ foo.Rate }}</td>
+                <td style="text-align: right">{{ foo.Disc }}</td>
+                <td style="text-align: right">{{ foo.TaxableAmount }}</td>
+                <td>{{ foo.Ctax }}</td>
+                <td style="text-align: right">{{ foo.Camount }}</td>
+                <td>{{ foo.Stax }}</td>
+                <td style="text-align: right">{{ foo.Samount }}</td>
+                <td style="text-align: right">{{ foo.Total }}</td>
+            </tr>
+        {% endfor %}
+
+        <tr>
+            <th colspan="6" style="text-align: right">Total</th>
+            <th style="text-align: right">{{ sale.taxable }}</th>
+            <th colspan="2" style="text-align: right">{{ IGST }}</th>
+            <th colspan="2" style="text-align: right">{{ CGST }}</th>
+            <th style="text-align: right">{{ sale.totalFinal }}</th>
+        </tr>
+
+
+        <tr>
+            <td rowspan="4" colspan="6">
+                <p style="text-transform: uppercase;text-align: center">Total invoice amount in words</p>
+                Rupees: <span style="border-bottom: 1px dotted"> {{ TotalInWords }} Only.</span>
+            </td>
+            <td colspan="5">Total Amount before Tax</td>
+            <td class="text-right">{{ sale.taxable }}</td>
+        </tr>
+        <tr>
+            <td colspan="5">Add : CGST</td>
+            <td class="text-right">{{ CGST }}</td>
+        </tr>
+        <tr>
+            <td colspan="5">Add : SGST</td>
+            <td class="text-right">{{ IGST }}</td>
+        </tr>
+        <tr>
+            <td colspan="5">Round Off</td>
+            <td class="text-right">{{ sale.roundOff }}</td>
+
+        </tr>
+        <tr>
+            <td rowspan="3" colspan="4">
+                <span>BANK DETAILS:</span><br>
+                <span>{{ sale.companyID.bankdetails_set.all.0.bankName|upper }}, Branch: {{ sale.companyID.bankdetails_set.all.0.branch|upper }}</span><br>
+                <span> A/C No. : <span
+                        style="letter-spacing: 1px;font-weight: bold">{{ sale.companyID.bankdetails_set.all.0.accNo }}</span></span>
+                <br><span> IFS No. : <span
+                    style="letter-spacing: 1px;font-weight: bold">{{ sale.companyID.bankdetails_set.all.0.ifsc }}</span></span>
+            </td>
+            <td rowspan="6" colspan="2"><p style="text-align: center">
+                Kindly notify <br> through phone <br> if payment is done <br> through NEFT.
+            </p></td>
+            <td colspan="5">Other Charges</td>
+            <td class="text-right">{{ sale.otherCharges }}</td>
+        </tr>
+
+        <tr>
+            <td colspan="5">Total Amount after Tax</td>
+            <td class="text-right">{{ sale.grandTotal }}</td>
+        </tr>
+        <tr>
+            <td colspan="5">GST Payable on Reverse Charge</td>
+            <td class="text-right"></td>
+        </tr>
+        <tr>
+            <td rowspan="3" colspan="4">
+
+                <span> TERMS & CONDITIONS:</span>
+                <ul>
+                    <li>Goods once sold cannot be returned.</li>
+                    <li>All disputes are subject to Golaghat Jurisdiction only.</li>
+                    <li>E. & O. E.</li>
+
+                </ul>
+
+
+            </td>
+
+            <td colspan="6" rowspan="3">
+                <span>Certified that the particulars given above are true and correct.</span><br>
+                <div class="col-sm-12" style="text-align: center">
+                    <p><span style="font-style: italic">for</span> <span
+                            style="font-size: 13px;font-weight: bold">{{ sale.companyID.name|safe }}</span></p>
+
+                    <br><br>
+                    <p style="font-weight: bold">Authorised Signatory</p>
+
+                </div>
+            </td>
+        </tr>
+
+
+        </tbody>
+    </table>
+
+
+</div>
+<span style="font-size: 7px;">This is computer generated copy.</span>
+<script>
+    function myFunction() {
+        window.print();
+
+    }
+</script>
+</body>
+</html>
