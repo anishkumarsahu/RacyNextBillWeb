@@ -13,10 +13,6 @@
 
         }
 
-        .dt-buttons {
-            position: absolute;
-            left: 180px;
-        }
 
         #customerTable_length, #supplierTable_length {
             float: left;
@@ -616,11 +612,6 @@
                     exportOptions: {
                         columns: [0, 1, 2, 3]
                     }
-                }, {
-                    extend: 'print',
-                    exportOptions: {
-                        columns: [0, 1, 2, 3]
-                    }
                 }
                 ],
                 "columnDefs": [
@@ -728,11 +719,6 @@
             scrollX: true,
             buttons: [{
                 extend: 'excel',
-                exportOptions: {
-                    columns: [0, 1, 2, 3]
-                }
-            }, {
-                extend: 'print',
                 exportOptions: {
                     columns: [0, 1, 2, 3]
                 }

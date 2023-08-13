@@ -8,7 +8,6 @@
         <title>Title</title>
     {% endblock %}
     {% progressive_web_app_meta %}
-{#    <meta name="viewport" content="width=device-width, initial-scale=1.0">#}
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="icon" href="{% static 'logo/logo.png' %}" type="image/gif" sizes="16x16">
     <link rel="stylesheet" type="text/css" href="{% static 'cssMain/semantic.min.css' %}">
@@ -17,6 +16,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'cssMain/tableCss/buttons.semanticui.min.css' %}">
     <link rel="stylesheet" type="text/css"
           href="https://cdn.datatables.net/fixedcolumns/4.1.0/css/fixedColumns.dataTables.min.css">
+    <script src="{% static 'sw/app.js' %}"></script>
     {% block css %}
 
     {% endblock %}
@@ -75,8 +75,9 @@
             width: 100px !important;
         }
              .dt-buttons {
-            position: absolute!important;
-            left: 174px!important;
+              position: absolute!important;
+                left: 165px!important;
+                width: 70px!important;
         }
     </style>
 
