@@ -193,6 +193,7 @@ class Product(models.Model):
     class Meta:
         verbose_name_plural = 'k) Product List'
 
+
 class Expense(models.Model):
     expenseType = models.CharField(max_length=200, default='N/A')
     description = models.CharField(max_length=500, blank=True, null=True)

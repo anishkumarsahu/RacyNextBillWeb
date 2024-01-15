@@ -1,8 +1,8 @@
 from django.core import management
 from django.db.models import Q, Sum, F
+from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
-from django.template import loader
 from django.template.defaultfilters import register
 from django.utils.crypto import get_random_string
 from django.views.decorators.csrf import csrf_exempt
@@ -462,7 +462,7 @@ def supplier_ledger(request, id=None):
 
 # --------------------api-------------------------------
 
-
+@transaction.atomic
 def post_customer(request):
     if request.method == 'POST':
         cname = request.POST.get("cname")
@@ -554,7 +554,7 @@ def get_customer_detail_by_name(request):
 
     return JsonResponse({'data': data}, safe=False)
 
-
+@transaction.atomic
 def edit_customer(request):
     if request.method == 'POST':
         idC = request.POST.get("idC")
@@ -577,7 +577,7 @@ def edit_customer(request):
         cus.save()
         return JsonResponse({'message': 'success'}, safe=False)
 
-
+@transaction.atomic
 @csrf_exempt
 def delete_customer(request):
     if request.method == 'POST':
@@ -588,7 +588,7 @@ def delete_customer(request):
         cus.save()
         return JsonResponse({'message': 'success'}, safe=False)
 
-
+@transaction.atomic
 def post_supplier(request):
     if request.method == 'POST':
         sname = request.POST.get("sname")
@@ -675,7 +675,7 @@ def get_supplier_detail_by_name(request):
 
     return JsonResponse({'data': data}, safe=False)
 
-
+@transaction.atomic
 def edit_supplier(request):
     if request.method == 'POST':
         idC = request.POST.get("idC")
@@ -698,7 +698,7 @@ def edit_supplier(request):
         cus.save()
         return JsonResponse({'message': 'success'}, safe=False)
 
-
+@transaction.atomic
 @csrf_exempt
 def delete_supplier(request):
     if request.method == 'POST':
@@ -711,6 +711,7 @@ def delete_supplier(request):
 
 
 # hsn
+@transaction.atomic
 @csrf_exempt
 def post_hsn(request):
     if request.method == 'POST':
@@ -752,7 +753,7 @@ def get_hsn_detail(request, id=None):
     }
     return JsonResponse({'data': data}, safe=False)
 
-
+@transaction.atomic
 def edit_hsn(request):
     if request.method == 'POST':
         hsnID = request.POST.get("hsnID")
@@ -773,6 +774,7 @@ def edit_hsn(request):
 
 
 @csrf_exempt
+@transaction.atomic
 def delete_hsn(request):
     if request.method == 'POST':
         idC = request.POST.get("ID")
@@ -784,7 +786,7 @@ def delete_hsn(request):
 
 
 # category
-
+@transaction.atomic
 def post_category(request):
     if request.method == 'POST':
         hsn = request.POST.get("hsn")
@@ -853,7 +855,7 @@ def get_category_detail(request, id=None):
     }
     return JsonResponse({'data': data}, safe=False)
 
-
+@transaction.atomic
 def edit_category(request):
     if request.method == 'POST':
         categoryID = request.POST.get("categoryID")
@@ -881,7 +883,7 @@ def edit_category(request):
         else:
             return JsonResponse({'message': 'Already Exist'}, safe=False)
 
-
+@transaction.atomic
 @csrf_exempt
 def delete_category(request):
     if request.method == 'POST':
@@ -894,7 +896,7 @@ def delete_category(request):
 
 
 # product
-
+@transaction.atomic
 def post_product(request):
     if request.method == 'POST':
         pType = request.POST.get("pType")
@@ -1066,7 +1068,7 @@ def get_product_detail(request, id=None):
         }
         return JsonResponse({'data': data}, safe=False)
 
-
+@transaction.atomic
 def edit_product(request):
     if request.method == 'POST':
         pID = request.POST.get("pID")
@@ -1112,7 +1114,7 @@ def edit_product(request):
         # except:
         #     return JsonResponse({'message': 'error'}, safe=False)
 
-
+@transaction.atomic
 @csrf_exempt
 def delete_product(request):
     if request.method == 'POST':
@@ -1618,7 +1620,7 @@ class WareHouseListJson(BaseDatatableView):
 #     }
 #     return JsonResponse({'data': data}, safe=False)
 
-
+@transaction.atomic
 @csrf_exempt
 def add_sales(request):
     if request.method == 'POST':
@@ -2752,7 +2754,7 @@ def get_sales_detail_for_invoice(request, id=None):
     }
     return JsonResponse({'data': data}, safe=False)
 
-
+@transaction.atomic
 @csrf_exempt
 def delete_sales(request):
     if request.method == 'POST':
@@ -2768,7 +2770,7 @@ def delete_sales(request):
 
         return JsonResponse({'message': 'success'}, safe=False)
 
-
+@transaction.atomic
 @csrf_exempt
 def delete_sales_jet(request):
     if request.method == 'POST':
@@ -2784,7 +2786,7 @@ def delete_sales_jet(request):
 
         return JsonResponse({'message': 'success'}, safe=False)
 
-
+@transaction.atomic
 @csrf_exempt
 def take_sale_payment(request):
     if request.method == 'POST':
@@ -2801,7 +2803,7 @@ def take_sale_payment(request):
 
         return JsonResponse({'message': 'success'}, safe=False)
 
-
+@transaction.atomic
 @csrf_exempt
 def certificate_detail_update(request):
     if request.method == 'POST':
@@ -2815,7 +2817,7 @@ def certificate_detail_update(request):
 
         return JsonResponse({'message': 'success'}, safe=False)
 
-
+@transaction.atomic
 def post_company(request):
     if request.method == 'POST':
         companyName = request.POST.get("companyName")
@@ -2859,7 +2861,7 @@ def post_company(request):
 
         return JsonResponse({'message': 'success'}, safe=False)
 
-
+@transaction.atomic
 @csrf_exempt
 def delete_company(request):
     if request.method == 'POST':
@@ -2875,7 +2877,7 @@ def delete_company(request):
 
 
 # For EDit
-
+@transaction.atomic
 def Edit_company(request):
     if request.method == 'POST':
         ID = request.POST.get("companyID")
@@ -2937,7 +2939,7 @@ def get_company_list(request):
 
 
 # For User
-
+@transaction.atomic
 def post_User(request):
     if request.method == 'POST':
         CompanyUserName = request.POST.get("CompanyUserName")
@@ -2996,6 +2998,7 @@ def post_User(request):
 
 
 @csrf_exempt
+@transaction.atomic
 def delete_user(request):
     if request.method == 'POST':
         # try:
@@ -3027,7 +3030,7 @@ def get_User_detail(request, id=None):
     }
     return JsonResponse({'data': data}, safe=False)
 
-
+@transaction.atomic
 def Edit_user(request):
     if request.method == 'POST':
         ID = request.POST.get("UserID")
@@ -3080,6 +3083,7 @@ def user_logout(request):
 
 
 # For WareHouse
+@transaction.atomic
 def add_warehouse(request):
     if request.method == 'POST':
         WareHouseName = request.POST.get("WareHouseName")
@@ -3135,6 +3139,7 @@ def edit_warehouse(request):
 
 
 @csrf_exempt
+@transaction.atomic
 def delete_wareHouse(request):
     if request.method == 'POST':
         # try:
@@ -3183,7 +3188,7 @@ class UnitsListJson(BaseDatatableView):
             ])
         return json_data
 
-
+@transaction.atomic
 def add_unit(request):
     if request.method == 'POST':
         unitName = request.POST.get("unitName")
@@ -3216,7 +3221,7 @@ def get_unit_detail(request, id=None):
     }
     return JsonResponse({'data': data}, safe=False)
 
-
+@transaction.atomic
 def edit_unit(request):
     if request.method == 'POST':
         uniID = request.POST.get("uniID")
@@ -3232,6 +3237,7 @@ def edit_unit(request):
 
 
 @csrf_exempt
+@transaction.atomic
 def delete_unit(request):
     if request.method == 'POST':
         # try:
@@ -3246,6 +3252,7 @@ def delete_unit(request):
 # purchase
 
 @csrf_exempt
+@transaction.atomic
 def add_purchase(request):
     if request.method == 'POST':
         supplierID = request.POST.get("supplierID")
@@ -3638,6 +3645,7 @@ def get_purchase_detail(request, id=None):
 
 
 @csrf_exempt
+@transaction.atomic
 def delete_purchase(request):
     if request.method == 'POST':
         id = request.POST.get("ID")
@@ -3653,7 +3661,7 @@ def delete_purchase(request):
 
 
 # expense
-
+@transaction.atomic
 def add_expense(request):
     if request.method == 'POST':
         description = request.POST.get("description")
@@ -3710,7 +3718,7 @@ class ExpenseListJson(BaseDatatableView):
             ])
         return json_data
 
-
+@transaction.atomic
 def change_password(request):
     if request.method == 'POST':
 
@@ -3748,6 +3756,7 @@ def get_user_printer(request):
 
 
 @csrf_exempt
+@transaction.atomic
 def change_user_printer_setting(request):
     if request.method == 'POST':
         printerID = request.POST.get("printerID")
@@ -3758,7 +3767,7 @@ def change_user_printer_setting(request):
 
 
 # invoice
-
+@transaction.atomic
 def add_invoice(request):
     if request.method == 'POST':
         invoiceSeries = request.POST.get("invoiceSeries")
@@ -3878,7 +3887,7 @@ def download_expense_report(request):
 
     ex = Expense.objects.filter(isDeleted__exact=False, expenseDate__gte=startDate.date(),
                                 expenseDate__lte=endDate.date() + timedelta(days=1), expenseType=eType,
-                                companyID_id=int(companyID))
+                                companyID_id=int(companyID)).order_by('pk')
 
     bold = workbook.add_format({'bold': True})
     worksheet.write('A1', 'Serial No.', bold)
@@ -3925,7 +3934,7 @@ def download_purchase_report(request):
 
     pur = Purchase.objects.filter(isDeleted__exact=False, invoiceDate__gte=startDate.date(),
                                   invoiceDate__lte=endDate.date() + timedelta(days=1), purchaseType=eType,
-                                  companyID_id=int(companyID))
+                                  companyID_id=int(companyID)).order_by('pk')
 
     bold = workbook.add_format({'bold': True})
     worksheet.write('A1', 'Serial No.', bold)
@@ -3967,19 +3976,19 @@ def download_purchase_report(request):
 
             for po in PurchaseProduct.objects.filter(purchaseID_id=item.pk, isDeleted__exact=False, gst__exact=g):
                 taxVal = taxVal + po.total
-                taxAmount = taxAmount + (po.total * (g / 100.0))
+                taxAmount = taxAmount + round((po.total * (g / 100.0)),2)
                 rowCount = rowCount + 1
 
             worksheet.write(row, col + 5, taxVal)
             worksheet.write(row, col + 6, g)
             worksheet.write(row, col + 7, taxAmount)
-            worksheet.write(row, col + 8, taxAmount / 2.0)
-            worksheet.write(row, col + 9, taxAmount / 2.0)
+            worksheet.write(row, col + 8, round((taxAmount / 2.0),2))
+            worksheet.write(row, col + 9, round((taxAmount / 2.0),2))
             row += 1
             total_tax_val = total_tax_val + taxVal
             total_tax_amount = total_tax_amount + taxAmount
-            total_cgst = total_cgst + (taxAmount / 2.0)
-            total_sgst = total_sgst + (taxAmount / 2.0)
+            total_cgst = total_cgst + round((taxAmount / 2.0),2)
+            total_sgst = total_sgst + round((taxAmount / 2.0),2)
         if len(gsts) > 1:
             worksheet.merge_range('A{}:A{}'.format(str(row - len(gsts) + 1), str(row + len(gsts) - len(gsts))), i,
                                   merge_format)
@@ -4030,11 +4039,11 @@ def download_sales_report(request):
     if eType == 'Jet':
         pur = SalesJet.objects.filter(isDeleted__exact=False, invoiceDate__gte=startDate.date(),
                                       invoiceDate__lte=endDate.date() + timedelta(days=1),
-                                      companyID_id=int(companyID))
+                                      companyID_id=int(companyID)).order_by('pk')
     else:
         pur = Sales.objects.filter(isDeleted__exact=False, invoiceDate__gte=startDate.date(),
                                    invoiceDate__lte=endDate.date() + timedelta(days=1), salesType=eType,
-                                   companyID_id=int(companyID))
+                                   companyID_id=int(companyID)).order_by('pk')
 
     bold = workbook.add_format({'bold': True})
     worksheet.write('A1', 'Serial No.', bold)
@@ -4079,16 +4088,16 @@ def download_sales_report(request):
                 taxAmount = taxAmount + (po.total * (g / 100.0))
                 rowCount = rowCount + 1
 
-            worksheet.write(row, col + 5, taxVal)
+            worksheet.write(row, col + 5, round(taxVal,2))
             worksheet.write(row, col + 6, g)
-            worksheet.write(row, col + 7, taxAmount)
-            worksheet.write(row, col + 8, taxAmount / 2.0)
-            worksheet.write(row, col + 9, taxAmount / 2.0)
+            worksheet.write(row, col + 7, round(taxAmount,2))
+            worksheet.write(row, col + 8, round(taxAmount / 2.0,2))
+            worksheet.write(row, col + 9, round(taxAmount / 2.0,2))
             row += 1
-            total_tax_val = total_tax_val + taxVal
-            total_tax_amount = total_tax_amount + taxAmount
-            total_cgst = total_cgst + (taxAmount / 2.0)
-            total_sgst = total_sgst + (taxAmount / 2.0)
+            total_tax_val = total_tax_val + round(taxVal,2)
+            total_tax_amount = total_tax_amount + round(taxAmount,2)
+            total_cgst = total_cgst + round((taxAmount / 2.0),2)
+            total_sgst = total_sgst + round((taxAmount / 2.0),2)
         if len(gsts) > 1:
             worksheet.merge_range('A{}:A{}'.format(str(row - len(gsts) + 1), str(row + len(gsts) - len(gsts))), i,
                                   merge_format)
@@ -4127,6 +4136,7 @@ def download_sales_report(request):
 
 
 @csrf_exempt
+@transaction.atomic
 def add_booking(request):
     if request.method == 'POST':
         challNo = request.POST.get("challNo")
@@ -4439,6 +4449,7 @@ class BookingListJson(BaseDatatableView):
 
 
 @csrf_exempt
+@transaction.atomic
 def delete_booking(request):
     if request.method == 'POST':
         id = request.POST.get("ID")
@@ -4479,6 +4490,7 @@ def BookingSale(request, id=None):
 
 
 @csrf_exempt
+@transaction.atomic
 def update_booking(request):
     if request.method == 'POST':
         personalDiscount = request.POST.get("personalDiscount")
@@ -4697,6 +4709,7 @@ def update_booking(request):
 
 
 @csrf_exempt
+@transaction.atomic
 def add_sales_from_booking(request):
     if request.method == 'POST':
         personalDiscount = request.POST.get("personalDiscount")
@@ -4944,6 +4957,7 @@ def JetToNormalSale(request, id=None):
 
 
 @csrf_exempt
+@transaction.atomic
 def add_sales_from_jet_to_normal(request):
     if request.method == 'POST':
         personalDiscount = request.POST.get("personalDiscount")
